@@ -1,0 +1,39 @@
+{
+  "name": "tdd-kata-1",
+  "version": "1.0.0",
+  "description": "A base setup for tdd environment for javascript",
+  "main": "index.js",
+  "scripts": {
+    "scenario": "mocha --ui mocha-cakes-2 test/**/*.scenario.js --require babel-polyfill --compilers js:babel-register",
+    "test": "mocha test/**/*.test.js --require babel-polyfill --compilers js:babel-register",
+    "test:watch": "npm run test -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatsNord/tdd-kata-1.git"
+  },
+  "keywords": [
+    "tdd",
+    "javascript",
+    "environment"
+  ],
+  "author": "Mats Nord",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatsNord/tdd-kata-1/issues"
+  },
+  "homepage": "https://github.com/MatsNord/tdd-kata-1#readme",
+  "devDependencies": {
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.3.3",
+    "babel-register": "^6.24.1",
+    "chai": "^3.5.0",
+    "isparta": "^4.0.0",
+    "istanbul": "^0.4.5",
+    "jasmine-node": "^1.14.5",
+    "minimatch": "^3.0.3",
+    "mocha": "^3.2.0",
+    "mocha-cakes-2": "^2.1.0",
+    "should": "^11.2.1"
+  }
+}
