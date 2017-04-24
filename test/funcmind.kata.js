@@ -21,7 +21,6 @@ function matchIncl(game, guess){
 	const inMatcher = inMatch(game);
 	return guess.map(inMatcher)	
 }
-
 	
 function formatString(exactMatches, includeMatches){
 	return exactMatches.reduce(formatter("X"), "" ) +
@@ -34,7 +33,39 @@ function check(game, guess){
 	return formatString(exactMatches, includeMatches);
 }
 
-describe("functional mind", function() {
+describe("Functions", function(){
+	it("getGame()", function(){
+		expect( getGame([1,2,3,4])).eql([1,2,3,4],"Game was not matched");
+	});
+	it("exMatch()", function(){
+		expect(exMatch([1])).to.be.a('function', "exmatch() did not return a function");
+		expect(exMatch([1])(1, 0)).true;
+		expect(exMatch([1])(2, 0)).false;
+	});
+	it("inMatch()", function(){
+		expect(inMatch([1])).to.be.a('function', "inMatch() did not return a function");
+		expect(inMatch([0,0,1])(1, 0)).true;
+		expect(inMatch([0,0,1])(2, 0)).false;
+	});
+	it("reducer()", function(){
+		expect(reducer( [1,2] )).to.be.a('function', "reducer() did not return a function");
+		expect(reducer( [3,4] )([], true, 1)).eql([4]);
+		expect(reducer( [5,6] )([], false, 0)).eql([]);
+	});
+	it("filtr()", function(){
+		expect(filtr( [1,2] )).to.be.a('function', "filtr() did not return a function");
+		expect(filtr( [3,4] )( 5 ) ).true;
+		expect(filtr( [5,6] )( 6 ) ).false;
+	});
+	it("formatter()", function(){
+		expect(formatter( "X" )).to.be.a('function', "formatter() did not return a function");
+		expect(formatter( "X" )("", 123 ) ).eql("X");
+		expect(formatter( "Y" )([1,2,3], 123 ) ).eql("1,2,3Y");
+	});
+
+});
+
+describe("Master mind", function() {
 	const game = getGame([4,4,4,3]);
 
 	it("should match exact", function (){
