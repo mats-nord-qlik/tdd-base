@@ -5,6 +5,11 @@ import {expect} from 'chai';
  */
 const EM = "X", IM = "O", NM = "";
 const getGame = (game) =>  game;
+
+const exMatcher = guess => ( peg, i ) => peg === guess[i] ? peg : -1;
+const inMatcher = guess =>  peg  =>  guess.includes( peg ) ? peg : -2;
+
+
 const getMatch = (game, guess) => {
 	let result = "";
 	// Exact Matches
