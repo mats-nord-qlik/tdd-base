@@ -7,9 +7,11 @@ const getGame = (game) =>  game;
 const exMatch = game => ( peg, i ) => peg === game[i];
 const inMatch = game =>  peg  =>  game.includes( peg );
 //Should probably be a filter
-const reducer =  guess => ( result, match, i ) =>  match ? result.concat(guess[i]) : result;
+const reducer =  guess => ( result, match, i ) =>  match ? result.concat( guess[i]) : result;
 
 const filtr = exclude => candidate => !exclude.includes(candidate);
+
+// Could have used a simple replace;
 const formatter = symbol => (acc, item) => acc + symbol;
 
 function matchExact(game, guess){
@@ -27,10 +29,14 @@ function formatString(exactMatches, includeMatches){
 		 includeMatches.reduce(formatter("O"),"");
 }
 
+function formatString2(arr, chr){
+	return arr.join("").replace(/\d/g, chr);
+}
+
 function check(game, guess){
 	const exactMatches = matchExact(game, guess).reduce(reducer(guess), []);
 	const includeMatches = matchIncl(game, guess).reduce(reducer(guess), []).filter(filtr(exactMatches));
-	return formatString(exactMatches, includeMatches);
+	return formatString2(exactMatches, "X") + formatString2(includeMatches, "O");
 }
 
 describe("Functions", function(){
