@@ -1,57 +1,34 @@
 import {expect} from 'chai';
-
 /**
- * I will put my game in the same file as the test
+ * Basic functions
  */
-const getGame = (game) =>  game;
-const exMatch = game => ( peg, i ) => peg === game[i];
-const inMatch = game =>  peg  =>  game.includes( peg );
-//Should probably be a filter
+
+// Should have an identity implementation
+const getGame = game =>  game;
+
+// Matcher for ex and in match
+
+const exactMatcher = game => ( peg, i ) => peg === game[i];
+const includeMatcher = game =>  peg  =>  game.includes( peg );
+const match = ( matcher, game ) => guess => guess.map( matcher( game ));
 const reducer =  guess => ( result, match, i ) =>  match ? result.concat( guess[i]) : result;
-
 const filtr = exclude => candidate => !exclude.includes(candidate);
-
-// Could have used a simple replace;
-const formatter = symbol => (acc, item) => acc + symbol;
-
-function matchExact(game, guess){
-	const exMatcher = exMatch(game);
-	return guess.map(exMatcher)
-}
-
-function matchIncl(game, guess){
-	const inMatcher = inMatch(game);
-	return guess.map(inMatcher)	
-}
-	
-function formatString(exactMatches, includeMatches){
-	return exactMatches.reduce(formatter("X"), "" ) +
-		 includeMatches.reduce(formatter("O"),"");
-}
-
-function formatString2(arr, chr){
-	return arr.join("").replace(/\d/g, chr);
-}
-
-function check(game, guess){
-	const exactMatches = matchExact(game, guess).reduce(reducer(guess), []);
-	const includeMatches = matchIncl(game, guess).reduce(reducer(guess), []).filter(filtr(exactMatches));
-	return formatString2(exactMatches, "X") + formatString2(includeMatches, "O");
-}
+const formatString = ( arr, chr ) => arr.join("").replace(/\d/g, chr );
 
 describe("Functions", function(){
 	it("getGame()", function(){
+		expect( getGame([1,2,3,4])).eql(getGame([1,2,3,4]),"Game was not matched");
 		expect( getGame([1,2,3,4])).eql([1,2,3,4],"Game was not matched");
 	});
 	it("exMatch()", function(){
-		expect(exMatch([1])).to.be.a('function', "exmatch() did not return a function");
-		expect(exMatch([1])(1, 0)).true;
-		expect(exMatch([1])(2, 0)).false;
+		expect(exactMatcher([1])).to.be.a('function', "exactMatcher() did not return a function");
+		expect(exactMatcher([1])(1, 0)).true;
+		expect(exactMatcher([1])(2, 0)).false;
 	});
-	it("inMatch()", function(){
-		expect(inMatch([1])).to.be.a('function', "inMatch() did not return a function");
-		expect(inMatch([0,0,1])(1, 0)).true;
-		expect(inMatch([0,0,1])(2, 0)).false;
+	it("includeMatcher()", function(){
+		expect(includeMatcher([1])).to.be.a('function', "includeMatcher() did not return a function");
+		expect(includeMatcher([0,0,1])(1, 0)).true;
+		expect(includeMatcher([0,0,1])(2, 0)).false;
 	});
 	it("reducer()", function(){
 		expect(reducer( [1,2] )).to.be.a('function', "reducer() did not return a function");
@@ -63,13 +40,21 @@ describe("Functions", function(){
 		expect(filtr( [3,4] )( 5 ) ).true;
 		expect(filtr( [5,6] )( 6 ) ).false;
 	});
-	it("formatter()", function(){
-		expect(formatter( "X" )).to.be.a('function', "formatter() did not return a function");
-		expect(formatter( "X" )("", 123 ) ).eql("X");
-		expect(formatter( "Y" )([1,2,3], 123 ) ).eql("1,2,3Y");
+	it("formatString()", function(){
+		expect(formatString( [], "*" )).equal("", "formatString() failed on format empty array");
+		expect(formatString( [1], "*" )).equal("*");
+		expect(formatString( [1,0], "*" )).equal("**");
 	});
-
 });
+
+/**
+ * The master min in functional version
+ */
+const check = (game, guess) => {
+	const exactMatches = match( exactMatcher, game )( guess ).reduce( reducer( guess ), []);
+	const includeMatches = match( includeMatcher, game )( guess ).reduce( reducer( guess ), []).filter( filtr( exactMatches ));
+	return formatString( exactMatches, "X") + formatString( includeMatches, "O");
+}
 
 describe("Master mind", function() {
 	const game = getGame([4,4,4,3]);
@@ -86,19 +71,19 @@ describe("Master mind", function() {
 		const guess = [3,1,1,3];
 		expect( check(game, guess)).eql("X");
 	});	
-	it("should match both", function (){
+	it("should match ", function (){
 		const guess = [3,4,4,1];
 		expect( check(game, guess)).eql("XXO");
 	});	
-	it("should match both", function (){
+	it("should match three out of four", function (){
 		const guess = [6,4,4,3];
 		expect( check(game, guess)).eql("XXX");
 	});	
-	it("should match both", function (){
+	it("should match exact match", function (){
 		const guess = [4,4,4,3];
 		expect( check(game, guess)).eql("XXXX");
 	});	
-	it("should match both", function (){
+	it("should match all in wrong place", function (){
 		const game = getGame([1,2,3,4])
 		const guess = [4,3,2,1];
 		expect( check(game, guess)).eql("OOOO");
