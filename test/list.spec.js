@@ -37,6 +37,10 @@ const curry = ( f, arr = [] ) => (...args) => ( a => a.length === f.length ? f(.
 
 const add3 = curry((a, b, c) => a + b + c);
 
+const double = x => x * 2;
+
+const doubleAdd = curry((double,d, e) => double(d) + double(e));
+
 is( add3( 1, 2, 3 ) );
 is( add3( 1, 2 )( 3 ) );
 is( add3( 1 )( 2, 3 ) );
@@ -47,6 +51,9 @@ const b = a(2)
 const c = b(3);
 is ( c );
 
+is( doubleAdd( double, 2, 3 ) );
+is( doubleAdd( double, 2 )( 3 ) );
+is( doubleAdd( double )( 2 )( 3 ) );
 
 
 
