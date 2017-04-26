@@ -36,11 +36,6 @@ describe.only("functional list", () =>{
 const curry = ( f, arr = [] ) => (...args) => ( a => a.length === f.length ? f(...a) : curry(f, a) )([...arr, ...args]);
 
 const add3 = curry((a, b, c) => a + b + c);
-
-const double = x => x * 2;
-
-const doubleAdd = curry((double,d, e) => double(d) + double(e));
-
 is( add3( 1, 2, 3 ) );
 is( add3( 1, 2 )( 3 ) );
 is( add3( 1 )( 2, 3 ) );
@@ -51,6 +46,8 @@ const b = a(2)
 const c = b(3);
 is ( c );
 
+const double = x => x * 2;
+const doubleAdd = curry((double,d, e) => double(d) + double(e));
 is( doubleAdd( double, 2, 3 ) );
 is( doubleAdd( double, 2 )( 3 ) );
 is( doubleAdd( double )( 2 )( 3 ) );
