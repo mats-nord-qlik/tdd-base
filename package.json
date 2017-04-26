@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "scenario": "mocha --ui mocha-cakes-2 test/**/*.scenario.js --require babel-polyfill --compilers js:babel-register",
+    "spec": "mocha test/**/*.spec.js --require babel-polyfill --compilers js:babel-register",
     "test": "mocha test/**/*.test.js --require babel-polyfill --compilers js:babel-register",
     "test:watch": "npm run test -- --watch",
     "kata": "mocha test/**/*.kata.js --require babel-polyfill --compilers js:babel-register",
