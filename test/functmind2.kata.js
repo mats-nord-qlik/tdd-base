@@ -7,14 +7,32 @@ import Set from '../src/mySet';
 // Should have an identity implementation
 const getGame = game =>  game;
 
-// Matcher for ex and in match
-
+/**
+ * A few instructive words about the code
+ * 
+ * This is my functional version of master mind game
+ * 
+ * The pram starts in the function "check" (look further down)
+ * check does it's work on three lines:
+ * 
+ * 1 gets the exact matches
+ * 2 gets the included matches, with the exact matches filtered out (filet can be put on it's own line if you like)
+ * 3 Formats the output for the player that is guessing - basically it censors the anwer like [1,2] would be replace with "XX"" for exact matcher, and [3] replaced with "O" for other matches 
+ * 
+ * Staring from the check function, it is easy to follow the path in the program
+ * Every function/callback that is need is individually tested
+ * The match function exposes the API for the match. It also takes a matcher that is either an exactMatcher or an includeMatcher
+ * 
+ * The program is not perfect, please send me a message wiht your findings. :-)
+ *
+ */
 const exactMatcher = game => ( peg, i ) => peg === game[i];
 
 const includeMatcher = game =>  peg  =>  game.includes( peg );
 
 const match = ( matcher, game ) => guess => guess.map( matcher( game ));
 
+// Testing to use Set operations.. just for fun.
 const match2 = (game, guess) =>{
 	const gameSet = new Set(game);
 	const guessSet = new Set(guess);
@@ -62,7 +80,7 @@ describe("Functions", function(){
 });
 
 /**
- * The master min in functional version
+ * The master mind in functional version
  */
 const check = (game, guess) => {
 	const exactMatches = match( exactMatcher, game )( guess ).reduce( reducer( guess ), []);
@@ -73,6 +91,11 @@ const check = (game, guess) => {
 describe("Master mind", function() {
 	const game = getGame([4,4,4,3]);
 
+	it("should show empty string on no match", function (){
+		const guess = [5,5,5,5];
+		expect( check(game, guess)).eql("");
+	});
+	
 	it("should match exact", function (){
 		const guess = [1,1,1,3];
 		expect( check(game, guess)).eql("X");

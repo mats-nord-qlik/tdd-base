@@ -6,8 +6,25 @@ import {expect} from 'chai';
 // Should have an identity implementation
 const getGame = game =>  game;
 
-// Matcher for ex and in match
-
+/**
+ * A few instructive words about the code
+ * 
+ * This is my functional version of master mind game
+ * 
+ * The pram starts in the function "check" (look further down)
+ * check does it's work on three lines:
+ * 
+ * 1 gets the exact matches
+ * 2 gets the included matches, with the exact matches filtered out (filet can be put on it's own line if you like)
+ * 3 Formats the output for the player that is guessing - basically it censors the anwer like [1,2] would be replace with "XX"" for exact matcher, and [3] replaced with "O" for other matches 
+ * 
+ * Staring from the check function, it is easy to follow the path in the program
+ * Every function/callback that is need is individually tested
+ * The match function exposes the API for the match. It also takes a matcher that is either an exactMatcher or an includeMatcher
+ * 
+ * The program is not perfect, please send me a message wiht your findings. :-)
+ *
+ */
 const exactMatcher = game => ( peg, i ) => peg === game[i];
 const includeMatcher = game =>  peg  =>  game.includes( peg );
 const match = ( matcher, game ) => guess => guess.map( matcher( game ));
