@@ -1,13 +1,16 @@
 import {expect} from 'chai';
 
 /**
- * I will put my game in the same file as the test
+ * This is the non-functional version of the master mind kata.
+ * It looks ok and simple, but has some issues
+ * 
+ * getMatch is doing too much, matching exact, matching included, and formatting the result.
+ * This master mind function has no resuable components/functions. 
+ * If you want to build new logic on this functions, you will have to start over from the beginning.
+ * 
  */
 const EM = "X", IM = "O", NM = "";
 const getGame = (game) =>  game;
-
-const exMatcher = guess => ( peg, i ) => peg === guess[i] ? peg : -1;
-const inMatcher = guess =>  peg  =>  guess.includes( peg ) ? peg : -2;
 
 
 const getMatch = (game, guess) => {
